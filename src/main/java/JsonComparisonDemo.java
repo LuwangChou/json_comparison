@@ -65,95 +65,6 @@ jackson deserialize time used: 687ms
  */
 public class JsonComparisonDemo {
 
-    public static void testSerializeJsonLoop(int number) throws JsonProcessingException{
-        List<User> users = new ArrayList<User>();
-        if (number <= 0){
-            return;
-        }
-        for (int i = 0; i < 100; i++){
-            User user = new User();
-            user.setId(1000000+i);
-            user.setName("zhangsan"+i);
-            user.setBirthday((new Date()).toString());
-            users.add(user);
-        }
-        System.out.println("Start: test user number"+number);
-        long sum = 0L;
-        long start = 0L;
-        long end = 0L;
-        String gsonString = "";
-        for(int k = 0; k < 3 ; k++) {
-            //Test GSON serialize
-            Gson gson = new Gson();
-            start = System.currentTimeMillis();
-            gsonString = gson.toJson(users);
-            end = System.currentTimeMillis();
-            sum = sum + end - start;
-        }
-        System.out.println("gson time used" + sum/3 + "ms");
-
-        sum = 0L;
-        for(int k = 0; k < 3 ; k++) {
-            //Test GSON deserialize
-            start = System.currentTimeMillis();
-            List<User> retGsonUsers = JSON.parseArray(gsonString, User.class);
-            end = System.currentTimeMillis();
-            sum = sum + end - start;
-        }
-        System.out.println("gson deserilize time used " + sum/3 + "ms");
-
-        sum = 0L;
-        String jsonString = "";
-        for(int k = 0; k < 3 ; k++) {
-            //FastJson serilize
-            start = System.currentTimeMillis();
-            jsonString = JSON.toJSONString(users);
-            end = System.currentTimeMillis();
-            sum = sum + end - start;
-        }
-        System.out.println("fastjson serilize time used " + sum/3 + "ms");
-
-        sum = 0L;
-        for (int k = 0; k < 3; k++) {
-            //FastJson deserialize
-            start = System.currentTimeMillis();
-            List<User> retJsonUsers = JSON.parseArray(jsonString, User.class);
-            end = System.currentTimeMillis();
-            sum = sum + end - start;
-        }
-        System.out.println("fastjson deserilize time used " + sum/3 + "ms");
-
-        sum = 0L;
-        String jacksonString = "";
-        for (int k = 0; k < 3; k++) {
-            //Jackson
-            start = System.currentTimeMillis();
-            ObjectMapper mapper = new ObjectMapper();
-            jacksonString = mapper.writeValueAsString(users);
-            end = System.currentTimeMillis();
-            sum = sum + end - start;
-        }
-        System.out.println("jackson serialize time used" + sum/3 + "ms");
-        sum = 0L;
-        for (int k = 0; k < 3; k++) {
-            //Jackson deserialize
-            start = System.currentTimeMillis();
-            ObjectMapper deMapper = new ObjectMapper();
-            deMapper.writeValueAsString(users);
-            try {
-                List<User> retJacksonUser;
-                retJacksonUser = deMapper.readValue(jacksonString, List.class);
-                retJacksonUser.clear();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            end = System.currentTimeMillis();
-            sum = sum + end - start;
-        }
-        System.out.println("jackson deserialize time used" + sum/3 + "ms");
-        System.out.println("Done: test user number"+number);
-    }
-
     public static void testSerializeJson(int number) throws JsonProcessingException{
         List<User> users = new ArrayList<User>();
         if (number <= 0){
@@ -179,15 +90,6 @@ public class JsonComparisonDemo {
         sum = sum + end - start;
         System.out.println("gson time used" + sum + "ms");
 
-        /*
-        sum = 0L;
-        //Test GSON deserialize
-        start = System.currentTimeMillis();
-        List<User> retGsonUsers = JSON.parseArray(gsonString, User.class);
-        end = System.currentTimeMillis();
-        sum = sum + end - start;
-        System.out.println("gson deserilize time used " + sum + "ms");
-        */
         sum = 0L;
         String jsonString = "";
         //FastJson serilize
@@ -203,16 +105,6 @@ public class JsonComparisonDemo {
         }catch(IOException e){
             e.printStackTrace();
         }
-/*
-        sum = 0L;
-        //FastJson deserialize
-        start = System.currentTimeMillis();
-        List<User> retJsonUsers = JSON.parseArray(jsonString, User.class);
-        end = System.currentTimeMillis();
-        sum = sum + end - start;
-        System.out.println("fastjson deserilize time used " + sum + "ms");
-*/
-
 
         sum = 0L;
         String jacksonString = "";
@@ -224,22 +116,6 @@ public class JsonComparisonDemo {
         sum = sum + end - start;
         System.out.println("jackson serialize time used: " + sum + "ms");
         sum = 0L;
-        /*
-        //Jackson deserialize
-        start = System.currentTimeMillis();
-        ObjectMapper deMapper = new ObjectMapper();
-        deMapper.writeValueAsString(users);
-        try {
-            List<User> retJacksonUser;
-            retJacksonUser = deMapper.readValue(jacksonString, List.class);
-            retJacksonUser.clear();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        end = System.currentTimeMillis();
-        sum = sum + end - start;
-        System.out.println("jackson deserialize time used: " + sum + "ms");
-        */
         System.out.println("Done: test user number"+number);
     }
 
